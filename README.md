@@ -46,8 +46,8 @@ The separate LangChain chain answers strictly from retrieved document context.
 PowerShell:
 
 ```powershell
-git clone https://github.com/YOUR-USERNAME/tool-rag-starter.git
-cd tool-rag-starter
+git clone https://github.com/VagoX1/tool-rag.git
+cd tool-rag
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
