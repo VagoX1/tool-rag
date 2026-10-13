@@ -2,6 +2,8 @@
 
 A complete agentic RAG starter that keeps source documents, vectors, and conversation history local. OpenAI provides embeddings and reasoning; an allowlisted backend executes retrieval and external tools.
 
+> The included `company-handbook.md` is fictional demonstration data.
+
 ## Features
 
 - Hybrid retrieval combining semantic similarity with BM25-style keyword ranking.
@@ -20,19 +22,44 @@ A complete agentic RAG starter that keeps source documents, vectors, and convers
 - Safe local math for arithmetic, algebra, calculus, statistics, matrices, and units.
 - Strict tool schemas, fixed network hosts, timeouts, and bounded tool rounds.
 
+## Architecture
+
+```text
+Documents -> LangChain splitting -> OpenAI embeddings -> local hybrid index
+                                                           |
+Question  -> retrieval -> agent and allowlisted tools -> cited answer
+```
+
+The index combines semantic vector similarity with BM25-style keyword ranking.
+The standard agent can select local retrieval, web search, weather, or math tools.
+The separate LangChain chain answers strictly from retrieved document context.
+
+## Requirements
+
+- Python 3.12 (tested version)
+- An OpenAI API account with billing configured
+- An API key with Request access for Responses and Embeddings
+- Web Search Request access if you want to use web search
+
 ## Set up
 
 PowerShell:
 
 ```powershell
-cd C:\Users\Gerraldo\Documents\G\tool-rag-starter
+git clone https://github.com/YOUR-USERNAME/tool-rag-starter.git
+cd tool-rag-starter
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 $env:OPENAI_API_KEY="your-key"
 ```
 
 Your restricted OpenAI key needs `Request` access for Responses and Embeddings. Enable `Web Search: Request` if it is shown separately in your key settings. Never put the key in a source file or commit it.
+
+Each person running a cloned copy supplies their own API key and pays for their
+own API usage. If you deploy this project as a hosted service, keep the key only
+in the host's server-side secret storage; usage by your visitors is then billed
+to your OpenAI account.
 
 ## Add and ingest documents
 
@@ -119,7 +146,10 @@ python -m app.cli ask "Answer only from my documents" --no-web
 python -m app.cli chat --no-web
 ```
 
-Web search currently costs $0.01 per call plus search-content and answer tokens. Cited URLs are returned in `web_sources`; the answer also contains inline links.
+Web search and model pricing can change. Check the
+[current OpenAI API pricing](https://developers.openai.com/api/docs/pricing)
+before enabling it for other users. Cited URLs are returned in `web_sources`;
+the answer also contains inline links.
 
 ## Math tools
 
@@ -142,6 +172,10 @@ Start the service:
 ```powershell
 python -m app.cli serve
 ```
+
+> This starter API does not authenticate callers. Do not expose it directly to
+> the public internet without adding authentication, rate limits, request-size
+> limits, usage monitoring, and a spending cap.
 
 Open `http://127.0.0.1:8000/docs`, or ask a question:
 
@@ -201,3 +235,7 @@ Changing the embedding model requires ingestion again. Lowering history length r
 ```powershell
 pytest
 ```
+
+## License
+
+Released under the [MIT License](LICENSE).
