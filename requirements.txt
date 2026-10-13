@@ -1,0 +1,9 @@
+fastapi>=0.115,<1
+langchain-openai>=1,<2
+langchain-text-splitters>=1,<2
+openai>=1.100,<3
+pydantic>=2.10,<3
+pypdf>=5,<7
+pytest>=8,<10
+sympy>=1.14,<2
+uvicorn[standard]>=0.34,<1
